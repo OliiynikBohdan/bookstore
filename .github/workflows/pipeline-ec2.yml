@@ -74,7 +74,7 @@ jobs:
             export ECR_REGISTRY=${ECR_REGISTRY}
             export GIT_SHA=${GIT_SHA}
 
-            cd f1-store
+            cd bookstore
 
             aws ecr get-login-password --region "$AWS_REGION" \
               | sudo docker login --username AWS --password-stdin "$ECR_REGISTRY"
