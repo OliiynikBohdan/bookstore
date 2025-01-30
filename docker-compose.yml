@@ -1,42 +1,18 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment:
-      POSTGRES_DB: my_db
-      POSTGRES_USER: my_user
-      POSTGRES_PASSWORD: my_pass
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
-
-  redis:
-    image: redis:latest
-    restart: always
-    volumes:
-      - redis_data:/data
-    networks:
-      - app_network
-
   backend-rds:
     ports:
       - "8001:8001"
     image: 767397966663.dkr.ecr.eu-north-1.amazonaws.com/backend_rds:latest
     environment:
-      DB_NAME: my_db
       DB_USER: my_user
-      DB_PASSWORD: my_pass
-      DB_HOST: postgres
+      DB_PASSWORD: my_pass_test
+      DB_HOST: mydb.crqowsaoshjt.eu-north-1.rds.amazonaws.com
       DB_PORT: 5432
       SECRET_KEY: 'your-secret-key-here'
       DEBUG: 'True'
       CORS_ALLOWED_ORIGINS: 'http://localhost'
-    depends_on:
-      - postgres
-    command: sh -c "sleep 10 && python manage.py runserver 0.0.0.0:8001"
     networks:
       - app_network
 
@@ -48,13 +24,10 @@ services:
       SECRET_KEY: 'your-default-secret-key'
       DEBUG: 'True'
       CORS_ALLOWED_ORIGINS: 'http://localhost'
-      REDIS_HOST: redis
+      REDIS_HOST: clustercfg.myredis.qc2f95.eun1.cache.amazonaws.com
       REDIS_PORT: 6379
       REDIS_DB: 0
       REDIS_PASSWORD: ''
-    depends_on:
-      - redis
-    command: sh -c "sleep 10 && python manage.py runserver 0.0.0.0:8002"
     networks:
       - app_network
 
